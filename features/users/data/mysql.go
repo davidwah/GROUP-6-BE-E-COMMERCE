@@ -11,6 +11,14 @@ type mysqlUserRepository struct {
 	db *gorm.DB
 }
 
+// CheckRegister implements users.Data
+func (repo *mysqlUserRepository) CheckRegister(dataCheck map[string]string) bool {
+	checkUser := User{}
+	res := repo.db.First(&checkUser, dataCheck)
+
+	return res == nil
+}
+
 // InsertData implements users.Data
 func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err error) {
 	user := fromCore(input)

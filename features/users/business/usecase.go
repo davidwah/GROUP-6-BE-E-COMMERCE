@@ -9,6 +9,12 @@ type userUseCase struct {
 	userData users.Data
 }
 
+// CheckRegister implements users.Business
+func (uc *userUseCase) CheckRegister(dataCheck map[string]string) bool {
+	response := uc.userData.CheckRegister(dataCheck)
+	return response
+}
+
 // GetAllData implements users.Business
 func (uc *userUseCase) GetAllData() (data []users.Core, err error) {
 	response, err := uc.userData.SelectData()

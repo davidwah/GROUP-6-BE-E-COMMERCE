@@ -39,6 +39,7 @@ type Business interface {
 
 	//	Get user by ID
 	GetDatabyID(id uint) (interface{}, error)
+	CheckRegister(dataCheck map[string]string) (bool)
 }
 
 //	data
@@ -52,4 +53,5 @@ type Data interface {
 
 	//	Get user by ID
 	SelectDatabyID(id uint) (interface{}, error)
+	CheckRegister(dataCheck map[string]string) (bool)
 }

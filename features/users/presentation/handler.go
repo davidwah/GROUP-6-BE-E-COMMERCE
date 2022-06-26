@@ -59,24 +59,30 @@ func (handle *UserHandler) GetUserID(c echo.Context) error {
 }
 
 //	Belum selesai (kurang lengkap pada bagian extract email menggunakan regexp atau net/mail)
-func (handle *UserHandler) AddUser(c echo.Context) error {
+func (handle *UserHandler) Register(c echo.Context) error {
 	var newuser request.User
+
+	//	Memeriksa apakah user telah membuat account atau tidak
+	//	Pemeriksaan menggunakan fungsi CheckRegister yang terpadat pada mysql.go
+	dataCheck := map[string]string{
+		"email": c.FormValue("email"),
+		"nohp":  c.FormValue("nohp"),
+	}
+	check := handle.userBusiness.CheckRegister(dataCheck)
+	if !check {
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Email atau No Handphone anda telah terdaftar"))
+	}
+
+	
 	err := c.Bind(&newuser)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"message": "Failed to bind data user, check your input",
-		})
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind data user, check your input"))
 	}
 	dataUser := request.ToCore(newuser)
 	row, err := handle.userBusiness.InsertData(dataUser)
 	if row == -1 {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"message": err.Error(),
-		})
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed(err.Error()))
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "Success to insert your data",
-		"data":    row,
-	})
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to insert your data", row))
 }
