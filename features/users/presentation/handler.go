@@ -1,11 +1,14 @@
 package presentation
 
 import (
-	"construct-week1/features/users"
-	"construct-week1/features/users/presentation/response"
-	"construct-week1/middlewares"
 	"net/http"
 	"strconv"
+
+	"construct-week1/features/helper"
+	"construct-week1/features/users"
+	"construct-week1/features/users/presentation/request"
+	"construct-week1/features/users/presentation/response"
+	"construct-week1/middlewares"
 
 	"github.com/labstack/echo"
 )
@@ -21,49 +24,59 @@ func NewUserHandler(business users.Business) *UserHandler {
 }
 
 //	Menampilkan semua data user
+//	Done
 func (handle *UserHandler) GetAll(c echo.Context) error {
 
 	res, err := handle.userBusiness.GetAllData()
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": "Failed to get all data user",
-		})
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get all data user"))
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "Success",
-		"data":    response.FromCoreList(res),
-	})
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get all user", response.FromCoreList(res)))
 
 }
 
 //	Menampilkan data user berdasarkan ID
+//	Done
 func (handle *UserHandler) GetUserID(c echo.Context) error {
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
 	idUser, errId := strconv.Atoi(id)
 	if errId != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": "ID not recognized",
-		})
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
 	if idToken != idUser {
-		return c.JSON(http.StatusUnauthorized, map[string]interface{}{
-			"status":  "Error",
-			"message": "Unathorized",
-		})
+		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
 	}
 
 	userId, err := handle.userBusiness.GetDatabyID(uint(idUser))
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": "Failed get your data",
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
+	}
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get your data", userId))
+}
+
+//	Belum selesai (kurang lengkap pada bagian extract email menggunakan regexp atau net/mail)
+func (handle *UserHandler) AddUser(c echo.Context) error {
+	var newuser request.User
+	err := c.Bind(&newuser)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": "Failed to bind data user, check your input",
 		})
 	}
+	dataUser := request.ToCore(newuser)
+	row, err := handle.userBusiness.InsertData(dataUser)
+	if row == -1 {
+		return c.JSON(http.StatusBadRequest, map[string]interface{}{
+			"message": err.Error(),
+		})
+	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "Success",
-		"data":    userId,
+		"message": "Success to insert your data",
+		"data":    row,
 	})
 }

@@ -25,8 +25,8 @@ func (handle *AuthHandler) Login(c echo.Context) error {
 	token, e := handle.authHandler.LoginUsers(authData)
 	if e != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"status":  "error",
-			"message": "email or password incorrect",
+			"status":  "Error",
+			"message": "Email or Password incorrect",
 		})
 	}
 	data := map[string]interface{}{
@@ -34,8 +34,7 @@ func (handle *AuthHandler) Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"status":  "success",
-		"message": "login success",
+		"message": "Login Success",
 		"data":    data,
 	})
 }
