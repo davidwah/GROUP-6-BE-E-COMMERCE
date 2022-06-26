@@ -3,6 +3,7 @@ package data
 import (
 	"construct-week1/features/users"
 	"errors"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -13,13 +14,6 @@ type mysqlUserRepository struct {
 }
 
 // CheckRegister implements users.Data
-// func (repo *mysqlUserRepository) CheckRegister(dataCheck map[string]string) bool {
-// 	checkUser := User{}
-// 	res := repo.db.First(&checkUser, dataCheck)
-
-// 	return res == nil
-// }
-
 func (repo *mysqlUserRepository) CheckRegister(dataCheck string) int {
 	checkUser := User{}
 	res := repo.db.Where("email = ?", dataCheck).FirstOrCreate(&checkUser)
@@ -45,10 +39,11 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err erro
 		return 0, res.Error
 	}
 
-	if res.RowsAffected != 1 {
-		return 0, errors.New("failed")
+	if res.RowsAffected == 0 {
+		return 0, errors.New("")
 	}
 
+	fmt.Println(res.RowsAffected)
 	return int(res.RowsAffected), nil
 }
 
