@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 
 	users "construct-week1/features/users/data"
 
@@ -11,8 +12,8 @@ import (
 
 func InitDB() *gorm.DB {
 	config := map[string]string{
-		"DB_Username": "root",
-		"DB_Password": "mysql911",
+		"DB_Username": os.Getenv("username"),
+		"DB_Password": os.Getenv("password"),
 		"DB_Port":     "3306",
 		"DB_Host":     "127.0.0.1",
 		"DB_Name":     "db_construct1",

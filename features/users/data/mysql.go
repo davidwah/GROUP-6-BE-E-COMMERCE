@@ -1,8 +1,9 @@
 package data
 
 import (
-	"construct-week1/features/users"
 	"errors"
+
+	"construct-week1/features/users"
 
 	"gorm.io/gorm"
 )

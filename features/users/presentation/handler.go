@@ -64,14 +64,14 @@ func (handle *UserHandler) Register(c echo.Context) error {
 
 	//	Memeriksa apakah user telah membuat account atau tidak
 	//	Pemeriksaan menggunakan fungsi CheckRegister yang terpadat pada mysql.go
-	dataCheck := map[string]string{
-		"email": c.FormValue("email"),
-		"nohp":  c.FormValue("nohp"),
-	}
-	check := handle.userBusiness.CheckRegister(dataCheck)
-	if !check {
-		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Email atau No Handphone anda telah terdaftar"))
-	}
+	// dataCheck := map[string]string{
+	// 	"email": c.FormValue("email"),
+	// 	"nohp":  c.FormValue("nohp"),
+	// }
+	// check := handle.userBusiness.CheckRegister(dataCheck)
+	// if !check {
+	// 	return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Email atau No Handphone anda telah terdaftar"))
+	// }
 
 	
 	err := c.Bind(&newuser)
