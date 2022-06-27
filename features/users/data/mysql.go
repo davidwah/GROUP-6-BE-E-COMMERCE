@@ -5,6 +5,7 @@ import (
 
 	"construct-week1/features/users"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -12,19 +13,17 @@ type mysqlUserRepository struct {
 	db *gorm.DB
 }
 
-// CheckRegister implements users.Data
-func (repo *mysqlUserRepository) CheckRegister(dataCheck map[string]string) bool {
-	checkUser := User{}
-	res := repo.db.First(&checkUser, dataCheck)
-
-	return res == nil
-}
-
 // InsertData implements users.Data
 func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err error) {
 	user := fromCore(input)
 
-	res := repo.db.Create(&user)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	if err != nil {
+		return 0, errors.New("failed")
+	}
+	user.Password = string(bytes)
+
+	res := repo.db.Create(&user)	// Check register
 	if res.Error != nil {
 		return 0, res.Error
 	}

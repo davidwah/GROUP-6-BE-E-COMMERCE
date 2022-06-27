@@ -1,10 +1,12 @@
 package data
 
 import (
-	"fmt"
 	"construct-week1/features/auth"
 	"construct-week1/middlewares"
+	"errors"
+	"fmt"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -15,6 +17,13 @@ type mysqlUserRepository struct {
 // SelectLogin implements auth.Data
 func (repo *mysqlUserRepository) SelectLogin(data auth.User) (interface{}, error) {
 	var userData auth.User
+
+	// Error disini
+	res := bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(data.Password))
+	if res != nil {
+		return nil, errors.New("failed")
+	}
+
 	result := repo.db.Where("email = ? AND password = ?", data.Email, data.Password).First(&userData)
 	if result.Error != nil {
 		return nil, result.Error
