@@ -4,6 +4,7 @@ import (
 	"construct-week1/config"
 	"construct-week1/factory"
 	"construct-week1/routes"
+	"fmt"
 )
 
 func main() {
@@ -12,5 +13,6 @@ func main() {
 	presenter := factory.InitFactory(dbConn)
 
 	e := routes.New(presenter)
-	e.Logger.Fatal(e.Start(":8080"))
+	fmt.Println("Server jalan di -> http://localhost:8081")
+	e.Logger.Fatal(e.Start(":8081"))
 }
