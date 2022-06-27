@@ -12,6 +12,8 @@ type Core struct {
 	UpdatedAt    time.Time
 }
 
+
+
 //	business
 type Business interface {
 
