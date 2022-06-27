@@ -13,7 +13,7 @@ import (
 )
 
 type Presenter struct {
-	UserPresenter *userPresentation.UserHandler
+	UserPresenter  *userPresentation.UserHandler
 	LoginPresenter *loginPresentation.AuthHandler
 }
 
@@ -27,9 +27,12 @@ func InitFactory(dbConn *gorm.DB) Presenter {
 	userBusiness := userBusiness.NewUserBusiness(userData)
 	userPresentation := userPresentation.NewUserHandler(userBusiness)
 
+	productData := userData.NewProductRepository(dbConn)
+	//productBusiness := userBusiness.NewProductBusiness(productData)
+	//productPresentation := userPresentation.NewProductHandler(productBusiness)
+
 	return Presenter{
 		LoginPresenter: loginPresentation,
-		UserPresenter: userPresentation,
+		UserPresenter:  userPresentation,
 	}
 }
-

@@ -38,8 +38,8 @@ type Business interface {
 	GetAllData() (data []Core, err error)
 
 	//	Get user by ID
-	GetDatabyID(id uint) (interface{}, error)
-	CheckRegister(dataCheck string) (int)
+	GetDatabyID() (data []Core, err error)
+	CheckRegister(dataCheck string) int
 }
 
 //	data
@@ -53,5 +53,5 @@ type Data interface {
 
 	//	Get user by ID
 	SelectDatabyID(id uint) (interface{}, error)
-	CheckRegister(dataCheck string) (int)
+	CheckRegister(dataCheck string) int
 }
