@@ -21,5 +21,5 @@ jobs:
             git pull origin main
             docker stop appContainer
             docker rm appContainer
-            docker build -t G6ECOMMERCE:latest .
-            docker run -d -p 80:80 -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} --name appContainer G6ECOMMERCE:latest
+            docker build -t g6ecommerce:latest .
+            docker run -d -p 80:80 -e DB_USERNAME=${{ secrets.DB_USERNAME }} -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} -e DB_PORT=${{ secrets.DB_PORT }} -e DB_HOST=${{ secrets.DB_HOST }} -e DB_NAME=${{ secrets.DB_NAME }} --name appContainer g6ecommerce:latest
