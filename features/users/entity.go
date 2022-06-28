@@ -1,18 +1,20 @@
 package users
 
-import "time"
+import (
+	"construct-week1/features/products"
+	"time"
+)
 
 type Core struct {
-	ID           uint
-	Name         string
-	Email        string
-	Password     string
-	Alamat       string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID        uint
+	Name      string
+	Email     string
+	Password  string
+	Alamat    string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Products  []products.Core
 }
-
-
 
 //	business
 type Business interface {

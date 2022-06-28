@@ -1,49 +1,44 @@
 package data
 
 import (
+	"errors"
+
 	"construct-week1/features/auth"
 	"construct-week1/middlewares"
-	"errors"
-	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-type mysqlUserRepository struct {
+type mysqlAuthRepository struct {
 	db *gorm.DB
 }
 
 // SelectLogin implements auth.Data
-func (repo *mysqlUserRepository) SelectLogin(data auth.User) (interface{}, error) {
-	var userData auth.User
+func (repo *mysqlAuthRepository) SelectLogin(data auth.User, input string) (interface{}, error) {
+	// SelectLogin implements auth.Data
+	err := repo.db.Table("users").Select("password").Where("email = ?", data.Email).Scan(&data.Password)
+	if err.Error != nil {
+		return nil, err.Error
+	}
 
-	// Error disini
-	res := bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(data.Password))
+	res := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(input))
 	if res != nil {
 		return nil, errors.New("failed")
 	}
 
-	result := repo.db.Where("email = ? AND password = ?", data.Email, data.Password).First(&userData)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	if result.RowsAffected != 1 {
-		return nil, fmt.Errorf("error")
-	}
-
-	token, errToken := middlewares.CreateToken(int(userData.ID))
+	token, errToken := middlewares.CreateToken(int(data.ID))
 	if errToken != nil {
 		return nil, errToken
 	}
 
 	return token, nil
+
 }
 
 // Dependency Injection
-func NewUserRepository(conn *gorm.DB) auth.Data {
-	return &mysqlUserRepository{
+func NewAuthRepository(conn *gorm.DB) auth.Data {
+	return &mysqlAuthRepository{
 		db: conn,
 	}
 }

@@ -12,5 +12,5 @@ func main() {
 	presenter := factory.InitFactory(dbConn)
 
 	e := routes.New(presenter)
-	e.Logger.Fatal(e.Start(":80"))
+	e.Logger.Fatal(e.Start(":8080"))
 }
