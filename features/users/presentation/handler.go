@@ -61,18 +61,6 @@ func (handle *UserHandler) GetUserID(c echo.Context) error {
 //	Belum selesai (kurang lengkap pada bagian extract email menggunakan regexp atau net/mail)
 func (handle *UserHandler) Register(c echo.Context) error {
 	var newuser request.User
-
-	//	Memeriksa apakah user telah membuat account atau tidak
-	//	Pemeriksaan menggunakan fungsi CheckRegister yang terpadat pada mysql.go
-	// dataCheck := map[string]string{
-	// 	"email": c.FormValue("email"),
-	// 	"nohp":  c.FormValue("nohp"),
-	// }
-	// check := handle.userBusiness.CheckRegister(dataCheck)
-	// if !check {
-	// 	return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Email atau No Handphone anda telah terdaftar"))
-	// }
-
 	
 	err := c.Bind(&newuser)
 	if err != nil {
@@ -84,5 +72,5 @@ func (handle *UserHandler) Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.ResponseFailed(err.Error()))
 	}
 
-	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to insert your data", row))
+	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data"))
 }

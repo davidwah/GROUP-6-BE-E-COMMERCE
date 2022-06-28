@@ -3,8 +3,8 @@ package config
 import (
 	"fmt"
 	"os"
-	// "os"
 
+	products "construct-week1/features/products/data"
 	users "construct-week1/features/users/data"
 
 	"gorm.io/driver/mysql"
@@ -20,11 +20,13 @@ func InitDB() *gorm.DB {
 	db_name := os.Getenv("DB_NAME")
 
 	config := map[string]string{
+
 		"DB_Username": db_username,
 		"DB_Password": db_password,
 		"DB_Port":     db_port,
 		"DB_Host":     db_host,
 		"DB_Name":     db_name,
+
 	}
 
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=UTC",
@@ -45,4 +47,5 @@ func InitDB() *gorm.DB {
 
 func InitMigrate(db *gorm.DB) {
 	db.AutoMigrate(&users.User{})
+	db.AutoMigrate(&products.Product{})
 }

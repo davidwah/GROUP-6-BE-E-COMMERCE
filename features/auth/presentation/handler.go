@@ -2,7 +2,9 @@ package presentation
 
 import (
 	"net/http"
+
 	"construct-week1/features/auth"
+	"construct-week1/features/helper"
 
 	"github.com/labstack/echo"
 )
@@ -12,7 +14,7 @@ type AuthHandler struct {
 }
 
 // Dependency Injection
-func NewUserHandler(auth auth.Business) *AuthHandler {
+func NewAuthHandler(auth auth.Business) *AuthHandler {
 	return &AuthHandler{
 		authHandler: auth,
 	}
@@ -21,20 +23,17 @@ func NewUserHandler(auth auth.Business) *AuthHandler {
 func (handle *AuthHandler) Login(c echo.Context) error {
 	authData := auth.User{}
 	c.Bind(&authData)
-
-	token, e := handle.authHandler.LoginUsers(authData)
+	
+	var input string = authData.Password
+	token, e := handle.authHandler.LoginUsers(authData, input)
 	if e != nil {
-		return c.JSON(http.StatusBadRequest, map[string]interface{}{
-			"status":  "Error",
-			"message": "Email or Password incorrect",
-		})
-	}
-	data := map[string]interface{}{
-		"token": token,
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Email or Password incorrect"))
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"message": "Login Success",
-		"data":    data,
-	})
+	data := map[string]interface{}{
+		"token":    token,
+		"authdata": authData.Password,
+	}
+
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Login Success", data))
 }
