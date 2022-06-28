@@ -17,13 +17,25 @@ type Business interface {
 
 	InsertProduct(data Core) (int, error)
 
+	UpdateProduct(id string, data map[string]interface{}) (error)
+
+	DeleteProduct(id int) (error)
+
+	GetProduct(limit, offset int) ([]Core, error)
+
 	GetProductbyID(id uint) ([]Core, error)
 }
 
 //	data
 type Data interface {
 
-	InsertProduct(data Core) (int, error)
+	InsertProductData(data Core) (int, error)
+	
+	UpdateProductData(id string, data map[string]interface{}) (error)
 
-	SelectProductbyID(id uint) ([]Core, error)
+	DeleteProductData(id int) (error)
+
+	SelectProductData() ([]Core, error)
+
+	SelectProductbyIDData(id uint) ([]Core, error)
 }

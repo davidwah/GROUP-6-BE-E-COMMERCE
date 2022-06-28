@@ -23,7 +23,7 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err erro
 	}
 	user.Password = string(bytes)
 
-	res := repo.db.Create(&user)	// Check register
+	res := repo.db.Create(&user)	// Check register belum ketemu
 	if res.Error != nil {
 		return 0, res.Error
 	}

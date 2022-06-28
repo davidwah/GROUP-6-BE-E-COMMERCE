@@ -7,9 +7,9 @@ type User struct {
 }
 
 type Business interface {
-	LoginUsers(data User) (interface{}, error)
+	LoginUsers(data User, input string) (interface{}, error)
 }
 
 type Data interface {
-	SelectLogin(data User) (interface{}, error)
+	SelectLogin(data User, input string) (interface{}, error)
 }
