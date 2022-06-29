@@ -2,11 +2,11 @@ openapi: 3.0.3
 info:
   title: GROUP 6 PROJECT E-COMMERCE
   description: description API BE9
-  termsOfService: https://academy.alterra.id
+  termsOfService: kelompok 6 E-COMMERCE
   contact:
     name: API Support
-    url: https://www.alterra.id/support
-    email: support@alterra.id
+    url: https://www.kelompok6.id/support
+    email: support@kelompok6.id
   version: '1.0.0'
 
 servers:
@@ -31,6 +31,9 @@ tags:
   - name: Product
     description: Product data management
 paths:
+####################################
+#  AUTHENTICATION
+####################################
   /login:
     post:
       tags:
@@ -40,8 +43,8 @@ paths:
       requestBody:
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/requestLogin'
+            # schema:
+            #   $ref: '#/components/schemas/requestLogin'
             examples:
               userData1:
                 description: "Example data user"
@@ -68,8 +71,8 @@ paths:
           description: Success Response
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/responseLoginSuccess'
+              # schema:
+              #   $ref: '#/components/schemas/responseLoginSuccess'
               examples:
                 responseData1:
                   description: response success 1
@@ -98,8 +101,8 @@ paths:
           description: Failed Response
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/failedResponse'
+              # schema:
+                # $ref: '#/components/schemas/failedResponse'
               examples:
                 responseData1:
                   description: response failed 1
@@ -115,6 +118,96 @@ paths:
                     status: "failed",
                     message: "Login Failed. Your email doesn't match any entry"
                   }
+####################################
+#  REGISTER
+####################################
+  /users:
+    post:
+      tags:
+       - Register
+      summary: Register user
+      description: Register user description
+      requestBody:
+        content:
+          application/json:
+            # schema:
+              examples:
+                serData1:
+                  description: "Example create data user "
+                  value: {
+                    name: "user1",
+                    email: "user1@mail.id",
+                    password: "inipassword",
+                    alamat: "alamat user1"
+                  }
+                userData2:
+                  description: "Example data user"
+                  value: {
+                    name: "user2",
+                    email: "user2@mail.id",
+                    password: "inipassword",
+                    alamat: "alamat user2"
+                  } 
+      responses:
+        '200':
+          description: Respons success create users
+          content:
+            application/json:
+              # schema
+              # $ref
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    code: 200,
+                    status: "success",
+                    message: "Success to insert your data",
+                    data: {
+                      name: "user1",
+                      email: "user1@mail.id",
+                      password: "inipassword"  
+                      }
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200,
+                    status: "success",
+                    message: "Success to insert your data",
+                    data: {
+                      iname: "user1",
+                      email: "user1@mail.id",
+                      password: "inipassword" 
+                       }
+                  }
+
+        '400':
+          description: Failed Register
+          content:
+            application/json:
+              # schema:
+                # $ref: '#/components/schemas/failedResponse'
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    code: 400,
+                    status: "failed",
+                    message: "failed to bind data user check your input"
+                  }
+                responseData2:
+                  description: response failed 2
+                  value: {
+                    code: 400,
+                    status: "failed",
+                    message: "failed to bind data user check your input"
+                  }
+
+
+####################################
+#  PRODUCT
+####################################
+
   /products:
     get:
       tags:
