@@ -28,6 +28,8 @@ tags:
     description: Authentication
   - name: Users
     description: User data management
+  - name: Register
+    description: Register User
   - name: Product
     description: Product data management
 paths:
@@ -357,6 +359,14 @@ paths:
     get:
       tags:
         - Product
+      parameters:
+        - in: path
+          name: id   
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        
       responses:
         '200':
           description: response success 1
