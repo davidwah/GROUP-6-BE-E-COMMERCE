@@ -43,8 +43,8 @@ paths:
       requestBody:
         content:
           application/json:
-            # schema:
-            #   $ref: '#/components/schemas/requestLogin'
+            schema:
+              $ref: '#/components/schemas/requestLogin'
             examples:
               userData1:
                 description: "Example data user"
@@ -395,3 +395,49 @@ paths:
                      } 
                   
                   }
+components:
+  schemas: 
+    requestLogin:
+      type: object
+      properties:
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          minLength: 1
+    responseLoginSuccess:
+      type: object
+      properties: {
+        "code":{
+          type: number
+        },
+        "message": {
+          type: string
+        },
+        "status": {
+          type: string
+        },
+        "data":{
+          type: object
+        }
+      }
+    failedResponse:
+      type: object
+      properties: {
+        "code":{
+          type: number
+        },
+        "message": {
+          type: string
+        },
+        "status": {
+          type: string
+        }
+      }
+
+
+      
+
+
+    
