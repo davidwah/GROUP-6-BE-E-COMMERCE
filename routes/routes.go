@@ -2,8 +2,9 @@ package routes
 
 import (
 	"construct-week1/factory"
+	"construct-week1/middlewares"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func New(presenter factory.Presenter) *echo.Echo {
@@ -14,12 +15,12 @@ func New(presenter factory.Presenter) *echo.Echo {
 
 	//	User
 	e.POST("/users", presenter.UserPresenter.Register)
-	e.GET("/users", presenter.UserPresenter.GetAll)
-	e.GET("/user/:id", presenter.UserPresenter.GetUserID)
+	e.GET("/users/:id", presenter.UserPresenter.GetUserID, middlewares.JWTMiddleware())
 
-	//	Prodcut
-	e.POST("/products", presenter.ProductPresenter.AddProduct)
-
-
+	//	Product
+	e.POST("/products", presenter.ProductPresenter.AddProduct, middlewares.JWTMiddleware())
+	e.GET("/products", presenter.ProductPresenter.GetAllProduct, middlewares.JWTMiddleware())
+	e.GET("/products/:id", presenter.ProductPresenter.GetProductbyID, middlewares.JWTMiddleware())
+	
 	return e
 }

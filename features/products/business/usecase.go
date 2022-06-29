@@ -10,8 +10,9 @@ type productUseCase struct {
 }
 
 // DeleteProduct implements products.Business
-func (*productUseCase) DeleteProduct(id int) error {
-	panic("unimplemented")
+func (uc *productUseCase) DeleteProduct(id int) error {
+	req := uc.productData.DeleteProductData(id)
+	return req
 }
 
 // GetProduct implements products.Business
@@ -21,8 +22,9 @@ func (uc *productUseCase) GetProduct(limit, offset int) ([]products.Core, error)
 }
 
 // GetProductbyID implements products.Business
-func (*productUseCase) GetProductbyID(id uint) ([]products.Core, error) {
-	panic("unimplemented")
+func (uc *productUseCase) GetProductbyID(id uint) ([]products.Core, error) {
+	resp, err := uc.productData.SelectProductbyIDData(id)
+	return resp, err
 }
 
 // InsertProduct implements products.Business
@@ -36,8 +38,9 @@ func (uc *productUseCase) InsertProduct(data products.Core) (int, error) {
 }
 
 // UpdateProduct implements products.Business
-func (*productUseCase) UpdateProduct(id string, data map[string]interface{}) error {
-	panic("unimplemented")
+func (uc *productUseCase) UpdateProduct(id string, data map[string]interface{}) error {
+	req := uc.productData.UpdateProductData(id, data)
+	return req
 }
 
 // Dependency Injection

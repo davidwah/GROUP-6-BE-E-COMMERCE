@@ -7,10 +7,9 @@ import (
 	"construct-week1/features/helper"
 	"construct-week1/features/users"
 	"construct-week1/features/users/presentation/request"
-	"construct-week1/features/users/presentation/response"
 	"construct-week1/middlewares"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
@@ -23,35 +22,22 @@ func NewUserHandler(business users.Business) *UserHandler {
 	}
 }
 
-//	Menampilkan semua data user
-//	Done
-func (handle *UserHandler) GetAll(c echo.Context) error {
-
-	res, err := handle.userBusiness.GetAllData()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get all data user"))
-	}
-
-	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get all user", response.FromCoreList(res)))
-
-}
-
 //	Menampilkan data user berdasarkan ID
 //	Done
 func (handle *UserHandler) GetUserID(c echo.Context) error {
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
-	idUser, errId := strconv.Atoi(id)
+	iduser, errId := strconv.Atoi(id)
 	if errId != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
-	if idToken != idUser {
+	if idToken != iduser {
 		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
 	}
 
-	userId, err := handle.userBusiness.GetDatabyID(uint(idUser))
+	userId, err := handle.userBusiness.GetDatabyID(iduser)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
 	}

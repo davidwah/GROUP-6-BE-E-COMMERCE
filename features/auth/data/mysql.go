@@ -17,17 +17,18 @@ type mysqlAuthRepository struct {
 // SelectLogin implements auth.Data
 func (repo *mysqlAuthRepository) SelectLogin(data auth.User, input string) (interface{}, error) {
 	// SelectLogin implements auth.Data
-	err := repo.db.Table("users").Select("password").Where("email = ?", data.Email).Scan(&data.Password)
+	var userData auth.User
+	err := repo.db.Where("email = ?", data.Email).First(&userData)
 	if err.Error != nil {
 		return nil, err.Error
 	}
 
-	res := bcrypt.CompareHashAndPassword([]byte(data.Password), []byte(input))
+	res := bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(input))
 	if res != nil {
 		return nil, errors.New("failed")
 	}
 
-	token, errToken := middlewares.CreateToken(int(data.ID))
+	token, errToken := middlewares.CreateToken(int(userData.ID))
 	if errToken != nil {
 		return nil, errToken
 	}

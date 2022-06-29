@@ -1,7 +1,8 @@
 package users
 
 import (
-	"construct-week1/features/products"
+	// "construct-week1/features/cart"
+	// "construct-week1/features/products"
 	"time"
 )
 
@@ -13,7 +14,8 @@ type Core struct {
 	Alamat    string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Products  []products.Core
+	// Products  []products.Core
+	// Carts     []cart.Core
 }
 
 //	business
@@ -22,11 +24,8 @@ type Business interface {
 	//	Create user
 	InsertData(data Core) (row int, err error)
 
-	//	Get all user
-	GetAllData() (data []Core, err error)
-
 	//	Get user by ID
-	GetDatabyID(id uint) (interface{}, error)
+	GetDatabyID(id int) (interface{}, error)
 }
 
 //	data
@@ -35,9 +34,6 @@ type Data interface {
 	//	Create user
 	InsertData(data Core) (row int, err error)
 
-	//	Get all user
-	SelectData() (data []Core, err error)
-
 	//	Get user by ID
-	SelectDatabyID(id uint) (interface{}, error)
+	SelectDatabyID(id int) (interface{}, error)
 }
