@@ -9,14 +9,8 @@ type userUseCase struct {
 	userData users.Data
 }
 
-// GetAllData implements users.Business
-func (uc *userUseCase) GetAllData() (data []users.Core, err error) {
-	response, err := uc.userData.SelectData()
-	return response, err
-}
-
 // GetDatabyID implements users.Business
-func (uc *userUseCase) GetDatabyID(id uint) (interface{}, error) {
+func (uc *userUseCase) GetDatabyID(id int) (interface{}, error) {
 	response, err := uc.userData.SelectDatabyID(id)
 	return response, err
 }

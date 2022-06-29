@@ -35,20 +35,9 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err erro
 	return int(res.RowsAffected), nil
 }
 
-// SelectData implements users.Data
-func (repo *mysqlUserRepository) SelectData() (data []users.Core, err error) {
-	dataUsers := []User{}
-	res := repo.db.Find(&dataUsers)
-	if res.Error != nil {
-		return []users.Core{}, errors.New("failed")
-	}
-
-	return toCoreList(dataUsers), nil
-}
-
 // SelectDatabyID implements users.Data
-func (repo *mysqlUserRepository) SelectDatabyID(id uint) (interface{}, error) {
-	userId := User{}
+func (repo *mysqlUserRepository) SelectDatabyID(id int) (interface{}, error) {
+	var userId User
 	res := repo.db.First(&userId, id)
 	if res.Error != nil {
 		return nil, res.Error
