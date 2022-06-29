@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: GROUP 6 PROJECT E-COMMERCE
   description: description API BE9
-  termsOfService: kelompok 6 E-COMMERCE
+  termsOfService: https://www.kelompok6.id
   contact:
     name: API Support
     url: https://www.kelompok6.id/support
@@ -11,9 +11,9 @@ info:
 
 servers:
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/iffakhry/alta-api-be9/1.0.0
-  - url: https://{environment}.api.alterra.id/v1
-    description: ALTA API server
+    url: https://virtserver.swaggerhub.com/kelompok6/1.0.0
+  - url: https://{environment}.api.kelompok6.id/v1
+    description: KEL server
     variables:
       environment:
         default: dev
@@ -21,7 +21,7 @@ servers:
           - dev
           - staging
           - production
-  - url: http://13.215.249.83:80
+  - url: http://18.204.209.223
     description: ALTA API server
 tags:
   - name: Login
@@ -58,14 +58,6 @@ paths:
                   email: "alta2@alterra.id",
                   password: "inipassword2"
                 }
-              # type: object
-              # properties:
-              #   email:
-              #     type: string
-              #     example: alta@mail.com
-              #   password:
-              #     type: string
-              #     example: inipassword
       responses:
         '200':
           description: Success Response
