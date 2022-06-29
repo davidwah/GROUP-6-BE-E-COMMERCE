@@ -2,15 +2,19 @@ package data
 
 import (
 	"construct-week1/features/products"
+	// "construct-week1/features/users"
+
 	"gorm.io/gorm"
 )
 
 type Product struct {
 	gorm.Model
-	Name        string `json:"name" form:"name"`
-	Price       uint   `json:"price" form:"price"`
-	Quantity    uint   `json:"qty" form:"qty"`
-	Description string `json:"desc" form:"desc"`
+	IDUser      uint         `json:"user_id" form:"user_id"`
+	Name        string       `json:"name" form:"name"`
+	Price       uint         `json:"price" form:"price"`
+	Quantity    uint         `json:"qty" form:"qty"`
+	Description string       `json:"desc" form:"desc"`
+	// Users       []users.Core `gorm:"foreignKey:ID";references:ID;constraint:OnUpdate:CASCADE, OnDelete:CASCADE;`
 }
 
 //	(Mapping) gorm.Model (User struct) to Core (entity.go)
@@ -21,8 +25,6 @@ func (data *Product) toCore() products.Core {
 		Price:       data.Price,
 		Quantity:    data.Quantity,
 		Description: data.Description,
-		CreatedAt:   data.CreatedAt,
-		UpdatedAt:   data.UpdatedAt,
 	}
 }
 
@@ -40,6 +42,7 @@ func toCoreList(data []Product) []products.Core {
 //	Digunakan dalam pembuatan InsertData (mysql.go)
 func fromCore(core products.Core) Product {
 	return Product{
+		IDUser:      core.IDUser,
 		Name:        core.Name,
 		Price:       core.Price,
 		Quantity:    core.Quantity,

@@ -1,16 +1,18 @@
 package presentation
 
 import (
+	"errors"
+	"net/http"
+	"strconv"
+	"time"
+
 	"construct-week1/features/helper"
 	"construct-week1/features/products"
 	"construct-week1/features/products/presentation/request"
 	"construct-week1/features/products/presentation/response"
 	"construct-week1/middlewares"
-	"net/http"
-	"strconv"
-	"time"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type ProductHandler struct {
@@ -23,9 +25,18 @@ func NewProductHandler(business products.Business) *ProductHandler {
 	}
 }
 
+//	POST /products
 func (handle *ProductHandler) AddProduct(c echo.Context) error {
+	//	Merupakan validasi user id yaitu menggunakan token
+	idUser := middlewares.ExtractToken(c)
+	if idUser == 0 {
+		return errors.New("failed")
+	}
+
+	//	Proses pembuatan data product
 	var newProduct request.Product
-	errCreate := c.Bind(*&newProduct)
+	newProduct.IDUser = uint(idUser)
+	errCreate := c.Bind(&newProduct)
 	if errCreate != nil {
 		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind your data product, check your input"))
 	}
@@ -39,7 +50,15 @@ func (handle *ProductHandler) AddProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data product"))
 }
 
+//	GET /products
 func (handle *ProductHandler) GetAllProduct(c echo.Context) error {
+	//	Merupakan validasi user id yaitu menggunakan token
+	id := middlewares.ExtractToken(c)
+	if id == 0 {
+		return errors.New("failed")
+	}
+
+	//	Proses pengambilan semua data product
 	limit, offset := c.QueryParam("limit"), c.QueryParam("offset")
 	limitInt, _ := strconv.Atoi(limit)
 	offsetInt, _ := strconv.Atoi(offset)
@@ -52,14 +71,23 @@ func (handle *ProductHandler) GetAllProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get all data product", response.FromCoreList(res)))
 }
 
+//	GET /products:id
 func (handler *ProductHandler) GetProductbyID(c echo.Context) error {
+	//	Merupakan validasi user id yaitu menggunakan token
+	idToken := middlewares.ExtractToken(c)
+
 	id := c.Param("id")
-	idproduct, err := strconv.Atoi(id)
+	idProduct, err := strconv.Atoi(id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
-	res, err := handler.productBusiness.GetProductbyID(uint(idproduct))
+	if idToken != idProduct {
+		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unauthorized"))
+	}
+
+	//	Proses pengambilan data product yang dimiliki oleh user
+	res, err := handler.productBusiness.GetProductbyID(uint(idProduct))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get your data product"))
 	}
@@ -67,23 +95,22 @@ func (handler *ProductHandler) GetProductbyID(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get your data product", response.FromCoreListGetID(res)))
 }
 
+//	PUT /products:id
 func (handle *ProductHandler) UpdateProduct(c echo.Context) error {
+	//	Merupakan validasi user id yaitu menggunakan token
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
-	iduser, errid := strconv.Atoi(id)
-	if errid != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"message": "ID not recognized",
-		})
+	idProduct, err := strconv.Atoi(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
-	if idToken != iduser {
-		return c.JSON(http.StatusUnauthorized, map[string]interface{}{
-			"message": "Unauthorized",
-		})
+	if idToken != idProduct {
+		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unauthorized"))
 	}
 
+	//	Proses pengupdatan data product yang dimiliki oleh user
 	data := map[string]interface{}{
 		"ID":        c.FormValue("ID"),
 		"name":      c.FormValue("name"),
@@ -93,11 +120,15 @@ func (handle *ProductHandler) UpdateProduct(c echo.Context) error {
 		"UpdatedAt": time.Now(),
 	}
 
-	idproducts, _ := data["ID"].(string)
-	res := handle.productBusiness.UpdateProduct(idproducts, data)
+	idProducts, _ := data["ID"].(string)
+	res := handle.productBusiness.UpdateProduct(idProducts, data)
 	if res != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to update your data product"))
 	}
 
 	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success update your data product", data))
 }
+
+// func (handle *ProductHandler) DeleteProduct(id uint) error {
+
+// }

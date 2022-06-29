@@ -24,7 +24,7 @@ func (repo *mysqlProductRepository) SelectProductData() ([]products.Core, error)
 	if res.Error != nil {
 		return []products.Core{}, res.Error
 	}
-	return toCoreList(dataProducts), nil 
+	return toCoreList(dataProducts), nil
 }
 
 // UpdateProductData implements products.Data
@@ -42,7 +42,7 @@ func (repo *mysqlProductRepository) InsertProductData(input products.Core) (int,
 	}
 
 	if res.RowsAffected != 1 {
-		return 0, fmt.Errorf("Failed to insert product")
+		return 0, fmt.Errorf("failed to insert product")
 	}
 
 	return int(res.RowsAffected), nil
@@ -50,7 +50,13 @@ func (repo *mysqlProductRepository) InsertProductData(input products.Core) (int,
 
 // SelectProductbyID implements products.Data
 func (repo *mysqlProductRepository) SelectProductbyIDData(id uint) ([]products.Core, error) {
-	panic("unimplemented")
+	var productsId []Product
+	res := repo.db.Table("products").Select("*").Where("id_user", id).Find(&productsId)
+	if res.Error != nil {
+		return []products.Core{}, res.Error
+	}
+
+	return toCoreList(productsId), nil
 }
 
 // Dependency Injection

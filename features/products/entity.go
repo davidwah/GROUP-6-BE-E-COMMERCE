@@ -4,6 +4,7 @@ import "time"
 
 type Core struct {
 	ID          uint
+	IDUser      uint
 	Name        string
 	Price       uint
 	Quantity    uint
@@ -14,12 +15,11 @@ type Core struct {
 
 //	business
 type Business interface {
-
 	InsertProduct(data Core) (int, error)
 
-	UpdateProduct(id string, data map[string]interface{}) (error)
+	UpdateProduct(id string, data map[string]interface{}) error
 
-	DeleteProduct(id int) (error)
+	DeleteProduct(id int) error
 
 	GetProduct(limit, offset int) ([]Core, error)
 
@@ -28,12 +28,11 @@ type Business interface {
 
 //	data
 type Data interface {
-
 	InsertProductData(data Core) (int, error)
-	
-	UpdateProductData(id string, data map[string]interface{}) (error)
 
-	DeleteProductData(id int) (error)
+	UpdateProductData(id string, data map[string]interface{}) error
+
+	DeleteProductData(id int) error
 
 	SelectProductData() ([]Core, error)
 

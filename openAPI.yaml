@@ -1,0 +1,453 @@
+openapi: 3.0.3
+info:
+  title: GROUP 6 PROJECT E-COMMERCE
+  description: description API BE9
+  termsOfService: https://www.kelompok6.id
+  contact:
+    name: API Support
+    url: https://www.kelompok6.id/support
+    email: support@kelompok6.id
+  version: '1.0.0'
+
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/kelompok6/1.0.0
+  - url: https://{environment}.api.kelompok6.id/v1
+    description: KEL server
+    variables:
+      environment:
+        default: dev
+        enum:
+          - dev
+          - staging
+          - production
+  - url: http://18.204.209.223
+    description: ALTA API server
+tags:
+  - name: Login
+    description: Authentication
+  - name: Users
+    description: User data management
+  - name: Register
+    description: Register User
+  - name: Product
+    description: Product data management
+paths:
+####################################
+#  AUTHENTICATION
+####################################
+  /login:
+    post:
+      tags:
+        - Login
+      summary: login user
+      description: Login user description
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/requestLogin'
+            examples:
+              userData1:
+                description: "Example data user"
+                value: {
+                  email: "alta@alterra.id",
+                  password: "inipassword"
+                }
+              userData2:
+                description: "Example data user"
+                value: {
+                  email: "alta2@alterra.id",
+                  password: "inipassword2"
+                }
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              # schema:
+              #   $ref: '#/components/schemas/responseLoginSuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    code: 200,
+                    status: "success",
+                    message: "Login Success",
+                    data: {
+                      id: 1,
+                      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
+                    }
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200,
+                    status: "success",
+                    message: "Login Success",
+                    data: {
+                      id: 2,
+                      token: "AyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
+                    }
+                  }
+
+        '400':
+          description: Failed Response
+          content:
+            application/json:
+              # schema:
+                # $ref: '#/components/schemas/failedResponse'
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    code: 400,
+                    status: "failed",
+                    message: "Email and Password incorrect."
+                  }
+                responseData2:
+                  description: response failed 2
+                  value: {
+                    code: 400,
+                    status: "failed",
+                    message: "Login Failed. Your email doesn't match any entry"
+                  }
+####################################
+#  REGISTER
+####################################
+  /users:
+    post:
+      tags:
+       - Register
+      summary: Register user
+      description: Register user description
+      requestBody:
+        content:
+          application/json:
+            # schema:
+              examples:
+                serData1:
+                  description: "Example create data user "
+                  value: {
+                    name: "user1",
+                    email: "user1@mail.id",
+                    password: "inipassword",
+                    alamat: "alamat user1"
+                  }
+                userData2:
+                  description: "Example data user"
+                  value: {
+                    name: "user2",
+                    email: "user2@mail.id",
+                    password: "inipassword",
+                    alamat: "alamat user2"
+                  } 
+      responses:
+        '200':
+          description: Respons success create users
+          content:
+            application/json:
+              # schema
+              # $ref
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    code: 200,
+                    status: "success",
+                    message: "Success to insert your data",
+                    data: {
+                      name: "user1",
+                      email: "user1@mail.id",
+                      password: "inipassword"  
+                      }
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200,
+                    status: "success",
+                    message: "Success to insert your data",
+                    data: {
+                      iname: "user1",
+                      email: "user1@mail.id",
+                      password: "inipassword" 
+                       }
+                  }
+
+        '400':
+          description: Failed Register
+          content:
+            application/json:
+              # schema:
+                # $ref: '#/components/schemas/failedResponse'
+              examples:
+                responseData1:
+                  description: response failed 1
+                  value: {
+                    code: 400,
+                    status: "failed",
+                    message: "failed to bind data user check your input"
+                  }
+                responseData2:
+                  description: response failed 2
+                  value: {
+                    code: 400,
+                    status: "failed",
+                    message: "failed to bind data user check your input"
+                  }
+
+
+####################################
+#  PRODUCT
+####################################
+
+  /products:
+    get:
+      tags:
+        - Product
+      responses:
+        '200':
+          description: response success 1
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get all data product",
+                    data: {
+                      id: 1,
+                      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
+                    }
+                  
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get all data product",
+                    data: {
+                      id: 2,
+                      token: "2eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2MzgzMjYxODAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJhZG1pbiJ9.AebFR-oQjUSOMez2ucDWkiMrS2eQIPmcYm5c71qZ_co"
+                    }
+                  
+                  }
+        '400':
+          description: response error 1
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response error 1
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "failed to get all data product",
+                    data: {
+                    }
+                  
+                  }
+                responseData2:
+                  description: response failed 2
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "Failed to get all data product",
+                    data: {}
+                  
+                  }
+    post:
+      tags:
+        - Product
+      summary: product user
+      description: example product user
+      requestBody:
+        content:
+          application/json:
+            # schema
+            examples:
+              productData1:
+                description: "example data product"
+                value: {
+                  name: "lenovo",
+                  price: 10000,
+                  quantity: 3,
+                  description: "ini product lenovo"
+                }
+              productData2:
+                description: "example data product"
+                value: {
+                  name: "Asus",
+                  price: 10000,
+                  quantity: 3,
+                  description: "ini product asus"
+                }
+
+      responses:
+        '200':
+          description: response success post product insert
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response success create product 
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to insert your data product",
+                    data: {
+                      id: 1,
+                      name: "lenovo",
+                      price: 10000,
+                      qty: 3,
+                      description: "ini product lenovo"
+                     }
+                  
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get all data product",
+                    data: {
+                      id: 2,
+                      name: "Asus",
+                      price: 10000,
+                      quantity: 3,
+                      description: "ini product asus"
+                    }
+                  
+                  }
+        '400':
+          description: response error post product insert
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response error 1
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "failed to bind your data product, check your input",
+                    data: {
+                    }
+                  
+                  }
+                responseData2:
+                  description: response error 2
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "failed to bind your data product, check your input",
+                    data: {}
+                  
+                  }
+  /products/{id}:
+    get:
+      tags:
+        - Product
+      parameters:
+        - in: path
+          name: id   
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        
+      responses:
+        '200':
+          description: response success 1
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get your data product 1",
+                    data: {
+                      id_product: 1,
+                      name: "lenovo",
+                      price: 10000,
+                      qty: 3,
+                      description: "ini product lenovo"
+                     } 
+                  
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get your data product 2",
+                     data: {
+                      id_product: 2,
+                      name: "Asus",
+                      price: 10000,
+                      qty: 3,
+                      description: "ini product Asus"
+                     } 
+                  
+                  }
+components:
+  schemas: 
+    requestLogin:
+      type: object
+      properties:
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          minLength: 1
+    responseLoginSuccess:
+      type: object
+      properties: {
+        "code":{
+          type: number
+        },
+        "message": {
+          type: string
+        },
+        "status": {
+          type: string
+        },
+        "data":{
+          type: object
+        }
+      }
+    failedResponse:
+      type: object
+      properties: {
+        "code":{
+          type: number
+        },
+        "message": {
+          type: string
+        },
+        "status": {
+          type: string
+        }
+      }
+
+
+      
+
+
+    
