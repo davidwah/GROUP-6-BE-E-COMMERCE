@@ -9,13 +9,21 @@ import (
 
 type Product struct {
 	gorm.Model
-	IDUser      uint         `json:"user_id" form:"user_id"`
-	Name        string       `json:"name" form:"name"`
-	Price       uint         `json:"price" form:"price"`
-	Quantity    uint         `json:"qty" form:"qty"`
-	Description string       `json:"desc" form:"desc"`
-	// Users       []users.Core `gorm:"foreignKey:ID";references:ID;constraint:OnUpdate:CASCADE, OnDelete:CASCADE;`
+	IDUser      uint   `json:"id_user" form:"id_user"`
+	Name        string `json:"name" form:"name"`
+	Price       uint   `json:"price" form:"price"`
+	Quantity    uint   `json:"qty" form:"qty"`
+	Description string `json:"desc" form:"desc"`
 }
+
+// type ProductUpdate struct {
+// 	ID          uint   `json:"id" form:"id"`
+// 	IDUser      uint   `json:"user_id" form:"user_id"`
+// 	Name        string `json:"name" form:"name"`
+// 	Price       uint   `json:"price" form:"price"`
+// 	Quantity    uint   `json:"qty" form:"qty"`
+// 	Description string `json:"desc" form:"desc"`
+// }
 
 //	(Mapping) gorm.Model (User struct) to Core (entity.go)
 func (data *Product) toCore() products.Core {
@@ -49,3 +57,14 @@ func fromCore(core products.Core) Product {
 		Description: core.Description,
 	}
 }
+
+// func fromCoreUpdate(core products.Core) ProductUpdate {
+// 	return ProductUpdate{
+// 		ID:          core.ID,
+// 		IDUser:      core.IDUser,
+// 		Name:        core.Name,
+// 		Price:       core.Price,
+// 		Quantity:    core.Quantity,
+// 		Description: core.Description,
+// 	}
+// }

@@ -17,6 +17,12 @@ type mysqlUserRepository struct {
 func (repo *mysqlUserRepository) UpdatedData(id int, data users.Core) (error) {
 	user := fromCore(data)
 
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	if err != nil {
+		return errors.New("failed")
+	}
+	user.Password = string(bytes)
+
 	res := repo.db.Model(&user).Where("id = ? AND deleted_at IS NULL", id).Updates(user)
 	if res.Error != nil {
 		return res.Error
