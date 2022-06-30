@@ -15,13 +15,13 @@ func (uc *userUseCase) UpdatedData(id int, input users.Core) (error) {
 		return errors.New("all input data must be filled")
 	}
 
-	row := uc.userData.UpdatedData(id, input)
+	row := uc.userData.UpdateData(id, input)
 	return row
 }
 
 // GetDatabyID implements users.Business
-func (uc *userUseCase) FindDatabyID(id int) (interface{}, error) {
-	response, err := uc.userData.SelectDatabyID(id)
+func (uc *userUseCase) FindData(id int) (interface{}, error) {
+	response, err := uc.userData.SelectData(id)
 	return response, err
 }
 

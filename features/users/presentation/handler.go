@@ -24,20 +24,20 @@ func NewUserHandler(business users.Business) *UserHandler {
 
 //	Menampilkan data user berdasarkan ID
 //	Done
-func (handle *UserHandler) FindByID(c echo.Context) error {
+func (handle *UserHandler) GetDataUser(c echo.Context) error {
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
-	iduser, errId := strconv.Atoi(id)
+	idUser, errId := strconv.Atoi(id)
 	if errId != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
-	if idToken != iduser {
+	if idToken != idUser {
 		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
 	}
 
-	userId, err := handle.userBusiness.FindDatabyID(iduser)
+	userId, err := handle.userBusiness.FindData(idUser)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
 	}
@@ -61,7 +61,7 @@ func (handle *UserHandler) Register(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data"))
 }
 
-func (handle *UserHandler) Updated(c echo.Context) error {
+func (handle *UserHandler) UpdateDataUser(c echo.Context) error {
 	//	Validasi user
 	idToken := middlewares.ExtractToken(c)
 

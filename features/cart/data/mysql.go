@@ -12,9 +12,9 @@ type mysqlCartRepository struct {
 }
 
 // SelectCart implements cart.Data
-func (repo *mysqlCartRepository) SelectCart(id int) ([]cart.Core, error) {
+func (repo *mysqlCartRepository) SelectCart(id uint) ([]cart.Core, error) {
 	var dataCart []Cart
-	result := repo.db.Preload("Product").Find(&dataCart)
+	result := repo.db.Preload("Product").Where("user_id = ?", id).Find(&dataCart)
 	if result.Error != nil {
 		return []cart.Core{}, result.Error
 	}
@@ -34,6 +34,21 @@ func (repo *mysqlCartRepository) InsertCartData(data cart.Core) error {
 
 	if res.RowsAffected != 1 {
 		return fmt.Errorf("failed to insert cart")
+	}
+
+	return nil
+}
+
+func (repo *mysqlCartRepository) UpdateCartData(idCart uint, idUser uint, data cart.CoreUpdate) error {
+	
+	res := repo.db.Table("carts").Where("id = ? AND user_id = ?", idCart, idUser).Updates(data)
+	fmt.Println(res)
+	if res.Error == nil {
+		return res.Error
+	}
+
+	if res.RowsAffected != 1 {
+		return errors.New("Failed")
 	}
 
 	return nil

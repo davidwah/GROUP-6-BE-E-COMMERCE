@@ -12,7 +12,7 @@ type mysqlProductRepository struct {
 }
 
 // SelectProductID implements products.Data
-func (repo *mysqlProductRepository) SelectProductID(id int) (interface{}, error) {
+func (repo *mysqlProductRepository) SelectProductbyIDProduct(id uint) (interface{}, error) {
 	var productId Product
 	res := repo.db.First(&productId, id)
 	if res.Error != nil {
@@ -29,7 +29,7 @@ func (*mysqlProductRepository) DeleteProductData(id int) error {
 
 // SelectProductData implements products.Data
 //	e.GET("/products")
-func (repo *mysqlProductRepository) SelectProductData() ([]products.Core, error) {
+func (repo *mysqlProductRepository) SelectProduct() ([]products.Core, error) {
 	var dataProducts []Product
 
 	res := repo.db.Find(&dataProducts)
@@ -75,7 +75,7 @@ func (repo *mysqlProductRepository) InsertProductData(input products.Core) (int,
 
 // 	SelectProductbyID implements products.Data
 //	e.GET("/users/products/:id")
-func (repo *mysqlProductRepository) SelectProductbyIDData(id uint) ([]products.Core, error) {
+func (repo *mysqlProductRepository) SelectProductbyIDUser(id uint) ([]products.Core, error) {
 	var productsId []Product
 	res := repo.db.Table("products").Select("*").Where("id_user", id).Find(&productsId)
 	if res.Error != nil {

@@ -10,8 +10,8 @@ type productUseCase struct {
 }
 
 // GetProductID implements products.Business
-func (uc *productUseCase) GetProductID(id int) (interface{}, error) {
-	resp, err := uc.productData.SelectProductID(id)
+func (uc *productUseCase) FindProductbyIDProduct(id uint) (interface{}, error) {
+	resp, err := uc.productData.SelectProductbyIDProduct(id)
 	return resp, err
 }
 
@@ -22,14 +22,14 @@ func (uc *productUseCase) DeleteProduct(id int) error {
 }
 
 // GetProduct implements products.Business
-func (uc *productUseCase) GetProduct(limit, offset int) ([]products.Core, error) {
-	resp, err := uc.productData.SelectProductData()
+func (uc *productUseCase) FindAllProduct(limit, offset int) ([]products.Core, error) {
+	resp, err := uc.productData.SelectProduct()
 	return resp, err
 }
 
 // GetProductbyID implements products.Business
-func (uc *productUseCase) GetProductbyID(id uint) ([]products.Core, error) {
-	resp, err := uc.productData.SelectProductbyIDData(id)
+func (uc *productUseCase) FindProductbyIDUser(id uint) ([]products.Core, error) {
+	resp, err := uc.productData.SelectProductbyIDUser(id)
 	return resp, err
 }
 

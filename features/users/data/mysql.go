@@ -14,7 +14,7 @@ type mysqlUserRepository struct {
 }
 
 // UpdatedData implements users.Data
-func (repo *mysqlUserRepository) UpdatedData(id int, data users.Core) (error) {
+func (repo *mysqlUserRepository) UpdateData(id int, data users.Core) (error) {
 	user := fromCore(data)
 
 	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
@@ -58,7 +58,7 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (int, error) {
 }
 
 // SelectDatabyID implements users.Data
-func (repo *mysqlUserRepository) SelectDatabyID(id int) (interface{}, error) {
+func (repo *mysqlUserRepository) SelectData(id int) (interface{}, error) {
 	var userId User
 	res := repo.db.First(&userId, id)
 	if res.Error != nil {

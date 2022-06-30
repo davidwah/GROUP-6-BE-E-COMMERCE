@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type Order struct {
 	gorm.Model
-	UserId     uint `json:"id_user" form:"id_user"`
-	Address    Address
-	CreditCart CreditCart
+	UserId     uint       `json:"id_user" form:"id_user"`
+	Address    Address    `json:"address" form:"address"`
+	CreditCart CreditCart `json:"credit_cart" form:"credit_cart"`
 }
 
 type Address struct {

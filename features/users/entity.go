@@ -16,7 +16,7 @@ type Business interface {
 	InsertData(Core) (int, error)
 
 	//	Get user by ID
-	FindDatabyID(id int) (interface{}, error)
+	FindData(id int) (interface{}, error)
 
 	//	Updated user
 	UpdatedData(id int, data Core) (error)
@@ -29,8 +29,8 @@ type Data interface {
 	InsertData(Core) (int, error)
 
 	//	Get user by ID
-	SelectDatabyID(id int) (interface{}, error)
+	SelectData(id int) (interface{}, error)
 
 	//	Updated user
-	UpdatedData(id int, data Core) (error)
+	UpdateData(id int, data Core) (error)
 }
