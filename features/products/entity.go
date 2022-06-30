@@ -11,26 +11,32 @@ type Core struct {
 
 //	business
 type Business interface {
-	InsertProduct(data Core) (int, error)
+	
+	InsertProduct(Core) (int, error)
 
-	UpdateProduct(id string, data map[string]interface{}) error
+	UpdateProduct(id string, data map[string]interface{}) (error)
 
 	DeleteProduct(id int) error
 
 	GetProduct(limit, offset int) ([]Core, error)
 
 	GetProductbyID(id uint) ([]Core, error)
+
+	GetProductID (id int) (interface{}, error)
 }
 
 //	data
 type Data interface {
-	InsertProductData(data Core) (int, error)
 
-	UpdateProductData(id string, data map[string]interface{}) error
+	InsertProductData(Core) (int, error)
+
+	UpdateProductData(id string, data map[string]interface{}) (error)
 
 	DeleteProductData(id int) error
 
 	SelectProductData() ([]Core, error)
 
 	SelectProductbyIDData(id uint) ([]Core, error)
+
+	SelectProductID (id int) (interface{}, error)
 }

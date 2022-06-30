@@ -5,16 +5,16 @@ import (
 )
 
 type Cart struct {
-	ID      uint    `json:"id"`
-	Qty     uint    `json:"qty"`
-	UserId  uint    `json:"user_id"`
+	ID      uint    `json:"id" form:"id"`
+	Qty     uint    `json:"qty" form:"qty"`
+	UserId  uint    `json:"id_user" form:"id_user"`
 	Product Product `json:"product"`
 }
 
 type Product struct {
-	ID          uint   `json:"id"`
-	Name        string `json:"name"`
-	Price       uint   `json:"price"`
+	ID          uint   `json:"id" form:"id"`
+	Name        string `json:"name" form:"name"`
+	Price       uint   `json:"price" form:"price"`
 	Quantity    uint   `json:"qty" form:"qty"`
 	Description string `json:"desc" form:"desc"`
 }

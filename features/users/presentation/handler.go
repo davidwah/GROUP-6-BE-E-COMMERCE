@@ -58,7 +58,7 @@ func (handle *UserHandler) Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.ResponseFailed(err.Error()))
 	}
 
-	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to insert your data", dataUser))
+	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data"))
 }
 
 func (handle *UserHandler) Updated(c echo.Context) error {
@@ -88,5 +88,5 @@ func (handle *UserHandler) Updated(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Your account has been deleted"))
 	}
 
-	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Your account updated", dataUpdatedUser))
+	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Your account updated"))
 }

@@ -9,6 +9,12 @@ type productUseCase struct {
 	productData products.Data
 }
 
+// GetProductID implements products.Business
+func (uc *productUseCase) GetProductID(id int) (interface{}, error) {
+	resp, err := uc.productData.SelectProductID(id)
+	return resp, err
+}
+
 // DeleteProduct implements products.Business
 func (uc *productUseCase) DeleteProduct(id int) error {
 	req := uc.productData.DeleteProductData(id)
@@ -34,7 +40,7 @@ func (uc *productUseCase) InsertProduct(data products.Core) (int, error) {
 	}
 
 	row, err := uc.productData.InsertProductData(data)
-	return row, err 
+	return row, err
 }
 
 // UpdateProduct implements products.Business

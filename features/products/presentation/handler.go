@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
-	"time"
 
 	"construct-week1/features/helper"
 	"construct-week1/features/products"
@@ -25,7 +24,7 @@ func NewProductHandler(business products.Business) *ProductHandler {
 	}
 }
 
-//	POST /products
+//	e.POST("/products")
 func (handle *ProductHandler) AddProduct(c echo.Context) error {
 	//	Merupakan validasi user id yaitu menggunakan token
 	idUser := middlewares.ExtractToken(c)
@@ -50,7 +49,7 @@ func (handle *ProductHandler) AddProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data product"))
 }
 
-//	GET /products
+//	e.GET("/products")
 func (handle *ProductHandler) FindProduct(c echo.Context) error {
 	//	Proses pengambilan semua data product
 	limit, offset := c.QueryParam("limit"), c.QueryParam("offset")
@@ -65,7 +64,7 @@ func (handle *ProductHandler) FindProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get all data product", response.FromCoreList(res)))
 }
 
-//	GET /products:id
+//	e.GET("/users/products/:id")
 func (handler *ProductHandler) FindProductbyID(c echo.Context) error {
 	//	Merupakan validasi user id yaitu menggunakan token
 	idToken := middlewares.ExtractToken(c)
@@ -89,38 +88,56 @@ func (handler *ProductHandler) FindProductbyID(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get your data product", response.FromCoreListGetID(res)))
 }
 
-//	PUT /products:id
+//	e.PUT("/products/:id")
 func (handle *ProductHandler) UpdateProduct(c echo.Context) error {
 	//	Merupakan validasi user id yaitu menggunakan token
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
-	idProduct, err := strconv.Atoi(id)
+	idUser, err := strconv.Atoi(id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
-	if idToken != idProduct {
+	if idToken != idUser {
 		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unauthorized"))
 	}
 
-	//	Proses pengupdatan data product yang dimiliki oleh user
 	data := map[string]interface{}{
-		"ID":        c.FormValue("ID"),
-		"name":      c.FormValue("name"),
-		"price":     c.FormValue("price"),
-		"qty":       c.FormValue("qty"),
-		"desc":      c.FormValue("desc"),
-		"UpdatedAt": time.Now(),
+		"id":          c.FormValue("id"),
+		"name":        c.FormValue("name"),
+		"price":       c.FormValue("price"),
+		"quantity":    c.FormValue("qty"),
+		"description": c.FormValue("desc"),
+		// "UpdatedAt":   time.Now(),
 	}
 
-	idProducts, _ := data["ID"].(string)
-	res := handle.productBusiness.UpdateProduct(idProducts, data)
+	idproducts, _ := data["id"].(string)
+	res := handle.productBusiness.UpdateProduct(idproducts, data)
 	if res != nil {
-		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to update your data product"))
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to your update data product"))
 	}
 
-	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success update your data product", data))
+	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success update your data product"))
+}
+
+func (handle *ProductHandler) FindProductByID(c echo.Context) error {
+	err := middlewares.ExtractToken(c)
+	if err == 0 {
+		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
+	}
+
+	id := c.Param("id")
+	idProduct, errId := strconv.Atoi(id)
+	if errId != nil {
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
+	}
+
+	productId, err2 := handle.productBusiness.GetProductID(idProduct)
+	if err2 != nil {
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
+	}
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get your data", productId))
 }
 
 // func (handle *ProductHandler) DeleteProduct(id uint) error {

@@ -8,17 +8,17 @@ import (
 
 type Cart struct {
 	gorm.Model
-	ProductId uint `json:"product_id"`
-	UserId    uint `json:"user_id"`
-	Qty       uint `json:"qty"`
-	Status    int  `json:"status"`
+	ProductId uint `json:"id_product" form:"id_product"`
+	UserId    uint `json:"id_user" form:"id_user"`
+	Qty       uint `json:"qty" form:"qty"`
+	Status    int  `json:"status" form:"status"`
 	Product   Product
 }
 
 type Product struct {
 	gorm.Model
-	Name        string `json:"name"`
-	Price       uint   `json:"price"`
+	Name        string `json:"name" form:"name"`
+	Price       uint   `json:"price" form:"price"`
 	Quantity    uint   `json:"qty" form:"qty"`
 	Description string `json:"desc" form:"desc"`
 	Carts       []Cart
