@@ -24,8 +24,13 @@ type Product struct {
 	Carts       []Cart
 }
 
+type CartUpdate struct {
+	Qty       uint `json:"qty" form:"qty"`
+}
+
 func (data *Cart) toCore() cart.Core {
 	return cart.Core{
+		ID:        data.ID,
 		ProductId: data.ProductId,
 		UserId:    data.UserId,
 		Qty:       data.Qty,
@@ -55,3 +60,9 @@ func fromCore(core cart.Core) Cart {
 		Status:    core.Status,
 	}
 }
+
+// func fromCoreUpdate(core cart.CoreUpdate) CartUpdate {
+// 	return CartUpdate{
+// 		Qty: core.Qty,
+// 	}
+// }

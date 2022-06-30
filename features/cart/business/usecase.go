@@ -9,8 +9,18 @@ type cartUseCase struct {
 	cartData cart.Data
 }
 
+// UpdateCart implements cart.Business
+func (uc *cartUseCase) UpdateCart(idCart uint, idUser uint, data cart.CoreUpdate) error {
+	if data.Qty == 0 {
+		return errors.New("all input data must be filled")
+	}
+
+	row := uc.cartData.UpdateCartData(idCart, idUser, data)
+	return row
+}
+
 // FindDataCart implements cart.Business
-func (uc *cartUseCase) FindDataCart(id int) ([]cart.Core, error) {
+func (uc *cartUseCase) FindCart(id uint) ([]cart.Core, error) {
 	resp, err := uc.cartData.SelectCart(id)
 	return resp, err
 }

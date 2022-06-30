@@ -9,6 +9,10 @@ type Core struct {
 	Product   Product
 }
 
+type CoreUpdate struct {
+	Qty uint
+}
+
 type Product struct {
 	ID          uint
 	Name        string
@@ -22,7 +26,10 @@ type Business interface {
 	InsertCart(Core) error
 
 	//	Get cart by ID
-	FindDataCart(id int) ([]Core, error)
+	FindCart(id uint) ([]Core, error)
+
+	//	Update cart by ID Cart
+	UpdateCart(idCart uint, idUser uint, data CoreUpdate) error
 }
 
 type Data interface {
@@ -30,5 +37,8 @@ type Data interface {
 	InsertCartData(Core) error
 
 	//	Get cart by ID
-	SelectCart(id int) ([]Core, error)
+	SelectCart(id uint) ([]Core, error)
+
+	//	Update cart by ID Cart
+	UpdateCartData(idCart uint, idUser uint, data CoreUpdate) error
 }
