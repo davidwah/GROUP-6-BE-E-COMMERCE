@@ -13,13 +13,18 @@ import (
 	loginData "construct-week1/features/auth/data"
 	loginPresentation "construct-week1/features/auth/presentation"
 
+	cartBusiness "construct-week1/features/cart/business"
+	cartData "construct-week1/features/cart/data"
+	cartPresentation "construct-week1/features/cart/presentation"
+
 	"gorm.io/gorm"
 )
 
 type Presenter struct {
-	ProductPresenter *productPresentation.ProductHandler
-	UserPresenter    *userPresentation.UserHandler
 	LoginPresenter   *loginPresentation.AuthHandler
+	UserPresenter    *userPresentation.UserHandler
+	ProductPresenter *productPresentation.ProductHandler
+	CartPresenter    *cartPresentation.CartHandler
 }
 
 func InitFactory(dbConn *gorm.DB) Presenter {
@@ -36,9 +41,14 @@ func InitFactory(dbConn *gorm.DB) Presenter {
 	productBusiness := productBusiness.NewProductBusiness(productData)
 	productPresentation := productPresentation.NewProductHandler(productBusiness)
 
+	cartData := cartData.NewCartRepository(dbConn)
+	cartBusiness := cartBusiness.NewProductBusiness(cartData)
+	cartPresentation := cartPresentation.NewCartHandler(cartBusiness)
+
 	return Presenter{
 		LoginPresenter:   loginPresentation,
 		UserPresenter:    userPresentation,
 		ProductPresenter: productPresentation,
+		CartPresenter:    cartPresentation,
 	}
 }
