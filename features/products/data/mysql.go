@@ -28,7 +28,7 @@ func (repo *mysqlProductRepository) SelectProductData() ([]products.Core, error)
 }
 
 // UpdateProductData implements products.Data
-func (*mysqlProductRepository) UpdateProductData(id string, data map[string]interface{}) error {
+func (repo *mysqlProductRepository) UpdateProductData(id string, data map[string]interface{}) error {
 	panic("unimplemented")
 }
 

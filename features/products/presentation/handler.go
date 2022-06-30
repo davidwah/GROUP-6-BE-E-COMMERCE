@@ -51,13 +51,7 @@ func (handle *ProductHandler) AddProduct(c echo.Context) error {
 }
 
 //	GET /products
-func (handle *ProductHandler) GetAllProduct(c echo.Context) error {
-	//	Merupakan validasi user id yaitu menggunakan token
-	id := middlewares.ExtractToken(c)
-	if id == 0 {
-		return errors.New("failed")
-	}
-
+func (handle *ProductHandler) FindProduct(c echo.Context) error {
 	//	Proses pengambilan semua data product
 	limit, offset := c.QueryParam("limit"), c.QueryParam("offset")
 	limitInt, _ := strconv.Atoi(limit)
@@ -65,14 +59,14 @@ func (handle *ProductHandler) GetAllProduct(c echo.Context) error {
 
 	res, err := handle.productBusiness.GetProduct(limitInt, offsetInt)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Faile to get all data product"))
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get all data product"))
 	}
 
 	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get all data product", response.FromCoreList(res)))
 }
 
 //	GET /products:id
-func (handler *ProductHandler) GetProductbyID(c echo.Context) error {
+func (handler *ProductHandler) FindProductbyID(c echo.Context) error {
 	//	Merupakan validasi user id yaitu menggunakan token
 	idToken := middlewares.ExtractToken(c)
 

@@ -24,7 +24,7 @@ func NewUserHandler(business users.Business) *UserHandler {
 
 //	Menampilkan data user berdasarkan ID
 //	Done
-func (handle *UserHandler) GetUserID(c echo.Context) error {
+func (handle *UserHandler) FindByID(c echo.Context) error {
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
@@ -37,7 +37,7 @@ func (handle *UserHandler) GetUserID(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
 	}
 
-	userId, err := handle.userBusiness.GetDatabyID(iduser)
+	userId, err := handle.userBusiness.FindDatabyID(iduser)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
 	}
@@ -50,7 +50,7 @@ func (handle *UserHandler) Register(c echo.Context) error {
 	
 	err := c.Bind(&newuser)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind data user, check your input"))
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind your data"))
 	}
 	dataUser := request.ToCore(newuser)
 	row, err := handle.userBusiness.InsertData(dataUser)
@@ -58,5 +58,35 @@ func (handle *UserHandler) Register(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, helper.ResponseFailed(err.Error()))
 	}
 
-	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data"))
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to insert your data", dataUser))
+}
+
+func (handle *UserHandler) Updated(c echo.Context) error {
+	//	Validasi user
+	idToken := middlewares.ExtractToken(c)
+
+	id := c.Param("id")
+	iduser, errId := strconv.Atoi(id)
+	if errId != nil {
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
+	}
+
+	if idToken != iduser {
+		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
+	}
+
+	//	Proses pembuatan data update user
+	var updatedUser request.User
+	err := c.Bind(&updatedUser)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind your data, check to your input"))
+	}
+	
+	dataUpdatedUser := request.ToCore(updatedUser)
+	res := handle.userBusiness.UpdatedData(iduser, dataUpdatedUser)
+	if res != nil {
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Your account has been deleted"))
+	}
+
+	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Your account updated", dataUpdatedUser))
 }
