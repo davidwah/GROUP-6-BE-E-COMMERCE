@@ -28,5 +28,9 @@ func New(presenter factory.Presenter) *echo.Echo {
 	e.GET("/products", presenter.ProductPresenter.GetAllProduct, middlewares.JWTMiddleware())
 	e.GET("/products/:id", presenter.ProductPresenter.GetProductbyID, middlewares.JWTMiddleware())
 
+	//	Cart
+	e.POST("/cart", presenter.CartPresenter.AddCart, middlewares.JWTMiddleware())
+	e.GET("/cart", presenter.CartPresenter.FindCart, middlewares.JWTMiddleware())
+
 	return e
 }
