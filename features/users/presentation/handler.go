@@ -7,10 +7,9 @@ import (
 	"construct-week1/features/helper"
 	"construct-week1/features/users"
 	"construct-week1/features/users/presentation/request"
-	"construct-week1/features/users/presentation/response"
 	"construct-week1/middlewares"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type UserHandler struct {
@@ -23,22 +22,9 @@ func NewUserHandler(business users.Business) *UserHandler {
 	}
 }
 
-//	Menampilkan semua data user
-//	Done
-func (handle *UserHandler) GetAll(c echo.Context) error {
-
-	res, err := handle.userBusiness.GetAllData()
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get all data user"))
-	}
-
-	return c.JSON(http.StatusOK, helper.ResponseSuccessWithData("Success to get all user", response.FromCoreList(res)))
-
-}
-
 //	Menampilkan data user berdasarkan ID
 //	Done
-func (handle *UserHandler) GetUserID(c echo.Context) error {
+func (handle *UserHandler) GetDataUser(c echo.Context) error {
 	idToken := middlewares.ExtractToken(c)
 
 	id := c.Param("id")
@@ -51,7 +37,7 @@ func (handle *UserHandler) GetUserID(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
 	}
 
-	userId, err := handle.userBusiness.GetDatabyID(uint(idUser))
+	userId, err := handle.userBusiness.FindData(idUser)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
 	}
@@ -64,7 +50,7 @@ func (handle *UserHandler) Register(c echo.Context) error {
 	
 	err := c.Bind(&newuser)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind data user, check your input"))
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind your data"))
 	}
 	dataUser := request.ToCore(newuser)
 	row, err := handle.userBusiness.InsertData(dataUser)
@@ -74,3 +60,34 @@ func (handle *UserHandler) Register(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success to insert your data"))
 }
+
+func (handle *UserHandler) UpdateDataUser(c echo.Context) error {
+	//	Validasi user
+	idToken := middlewares.ExtractToken(c)
+
+	id := c.Param("id")
+	iduser, errId := strconv.Atoi(id)
+	if errId != nil {
+		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
+	}
+
+	if idToken != iduser {
+		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
+	}
+
+	//	Proses pembuatan data update user
+	var updatedUser request.User
+	err := c.Bind(&updatedUser)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Failed to bind your data, check to your input"))
+	}
+	
+	dataUpdatedUser := request.ToCore(updatedUser)
+	res := handle.userBusiness.UpdatedData(iduser, dataUpdatedUser)
+	if res != nil {
+		return c.JSON(http.StatusBadRequest, helper.ResponseFailed("Your account has been deleted"))
+	}
+
+	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Your account updated"))
+}
+

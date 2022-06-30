@@ -14,6 +14,7 @@ func ResponseSuccessNoData(message string) map[string]interface{} {
 	}
 }
 
+//	Nggak dipakai
 func ResponseSuccessWithData(message string, data interface{}) map[string]interface{} {
 	return map[string]interface{}{
 		"status":  "Success",

@@ -1,43 +1,36 @@
 package users
 
-import (
-	"construct-week1/features/products"
-	"time"
-)
+// "construct-week1/features/cart"
+// "construct-week1/features/products"
 
 type Core struct {
-	ID        uint
 	Name      string
 	Email     string
 	Password  string
-	Alamat    string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Products  []products.Core
 }
 
 //	business
 type Business interface {
 
 	//	Create user
-	InsertData(data Core) (row int, err error)
-
-	//	Get all user
-	GetAllData() (data []Core, err error)
+	InsertData(Core) (int, error)
 
 	//	Get user by ID
-	GetDatabyID(id uint) (interface{}, error)
+	FindData(id int) (interface{}, error)
+
+	//	Updated user
+	UpdatedData(id int, data Core) (error)
 }
 
 //	data
 type Data interface {
 
 	//	Create user
-	InsertData(data Core) (row int, err error)
-
-	//	Get all user
-	SelectData() (data []Core, err error)
+	InsertData(Core) (int, error)
 
 	//	Get user by ID
-	SelectDatabyID(id uint) (interface{}, error)
+	SelectData(id int) (interface{}, error)
+
+	//	Updated user
+	UpdateData(id int, data Core) (error)
 }
