@@ -1,7 +1,5 @@
 package products
 
-import "time"
-
 type Core struct {
 	ID          uint
 	IDUser      uint
@@ -9,8 +7,6 @@ type Core struct {
 	Price       uint
 	Quantity    uint
 	Description string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
 }
 
 //	business

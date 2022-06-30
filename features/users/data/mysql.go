@@ -13,8 +13,24 @@ type mysqlUserRepository struct {
 	db *gorm.DB
 }
 
+// UpdatedData implements users.Data
+func (repo *mysqlUserRepository) UpdatedData(id int, data users.Core) (error) {
+	user := fromCore(data)
+
+	res := repo.db.Model(&user).Where("id = ? AND deleted_at IS NULL", id).Updates(user)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	if res.RowsAffected != 1 {
+		return errors.New("Failed")
+	}
+
+	return nil
+}
+
 // InsertData implements users.Data
-func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err error) {
+func (repo *mysqlUserRepository) InsertData(input users.Core) (int, error) {
 	user := fromCore(input)
 
 	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
@@ -23,7 +39,7 @@ func (repo *mysqlUserRepository) InsertData(input users.Core) (row int, err erro
 	}
 	user.Password = string(bytes)
 
-	res := repo.db.Create(&user)	// Check register belum ketemu
+	res := repo.db.Create(&user) // Check register belum ketemu
 	if res.Error != nil {
 		return 0, res.Error
 	}
