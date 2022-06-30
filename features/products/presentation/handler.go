@@ -50,13 +50,13 @@ func (handle *ProductHandler) AddProduct(c echo.Context) error {
 }
 
 //	e.GET("/products")
-func (handle *ProductHandler) FindProduct(c echo.Context) error {
+func (handle *ProductHandler) GetAllProduct(c echo.Context) error {
 	//	Proses pengambilan semua data product
 	limit, offset := c.QueryParam("limit"), c.QueryParam("offset")
 	limitInt, _ := strconv.Atoi(limit)
 	offsetInt, _ := strconv.Atoi(offset)
 
-	res, err := handle.productBusiness.GetProduct(limitInt, offsetInt)
+	res, err := handle.productBusiness.FindAllProduct(limitInt, offsetInt)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get all data product"))
 	}
@@ -65,7 +65,7 @@ func (handle *ProductHandler) FindProduct(c echo.Context) error {
 }
 
 //	e.GET("/users/products/:id")
-func (handler *ProductHandler) FindProductbyID(c echo.Context) error {
+func (handler *ProductHandler) GetProductbyIDUser(c echo.Context) error {
 	//	Merupakan validasi user id yaitu menggunakan token
 	idToken := middlewares.ExtractToken(c)
 
@@ -80,7 +80,7 @@ func (handler *ProductHandler) FindProductbyID(c echo.Context) error {
 	}
 
 	//	Proses pengambilan data product yang dimiliki oleh user
-	res, err := handler.productBusiness.GetProductbyID(uint(idProduct))
+	res, err := handler.productBusiness.FindProductbyIDUser(uint(idProduct))
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to get your data product"))
 	}
@@ -121,7 +121,7 @@ func (handle *ProductHandler) UpdateProduct(c echo.Context) error {
 	return c.JSON(http.StatusOK, helper.ResponseSuccessNoData("Success update your data product"))
 }
 
-func (handle *ProductHandler) FindProductByID(c echo.Context) error {
+func (handle *ProductHandler) GetProductByIDProduct(c echo.Context) error {
 	err := middlewares.ExtractToken(c)
 	if err == 0 {
 		return c.JSON(http.StatusUnauthorized, helper.ResponseFailed("Unathorized"))
@@ -133,7 +133,7 @@ func (handle *ProductHandler) FindProductByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("ID not recognized"))
 	}
 
-	productId, err2 := handle.productBusiness.GetProductID(idProduct)
+	productId, err2 := handle.productBusiness.FindProductbyIDProduct(uint(idProduct))
 	if err2 != nil {
 		return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed get your data"))
 	}
