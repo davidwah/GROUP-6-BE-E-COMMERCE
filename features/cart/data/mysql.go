@@ -2,6 +2,7 @@ package data
 
 import (
 	"construct-week1/features/cart"
+	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -40,7 +41,7 @@ func (repo *mysqlCartRepository) InsertCartData(data cart.Core) error {
 }
 
 func (repo *mysqlCartRepository) UpdateCartData(idCart uint, idUser uint, data cart.CoreUpdate) error {
-	
+
 	res := repo.db.Table("carts").Where("id = ? AND user_id = ?", idCart, idUser).Updates(data)
 	fmt.Println(res)
 	if res.Error == nil {

@@ -162,7 +162,7 @@ paths:
                       name: "user1",
                       email: "user1@mail.id",
                       password: "inipassword"  
-                      }
+                    }
                   }
                 responseData2:
                   description: response success 2
@@ -174,7 +174,7 @@ paths:
                       iname: "user1",
                       email: "user1@mail.id",
                       password: "inipassword" 
-                       }
+                    }
                   }
 
         '400':
@@ -253,8 +253,7 @@ paths:
                     code: 400, 
                     status: "error",
                     message: "failed to get all data product",
-                    data: {
-                    }
+                    data: {}
                   
                   }
                 responseData2:
@@ -313,7 +312,7 @@ paths:
                       price: 10000,
                       qty: 3,
                       description: "ini product lenovo"
-                     }
+                    }
                   
                   }
                 responseData2:
@@ -344,8 +343,7 @@ paths:
                     code: 400, 
                     status: "error",
                     message: "failed to bind your data product, check your input",
-                    data: {
-                    }
+                    data: {}
                   
                   }
                 responseData2:
@@ -389,6 +387,199 @@ paths:
                       price: 10000,
                       qty: 3,
                       description: "ini product lenovo"
+                    } 
+                  }
+                responseData2:
+                  description: response success 2
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get your data product 2",
+                     data: {
+                      id_product: 2,
+                      name: "Asus",
+                      price: 10000,
+                      qty: 3,
+                      description: "ini product Asus"
+                    } 
+                  }
+
+####################################
+#  ORDER
+####################################
+
+  /order:
+    get:
+      tags:
+        - Order
+      security:
+        - JWTAuth: []
+      responses:
+        '200':
+          description: response order success 1
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseOrder:
+                  description: response order success 1
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get all data order",
+                    data: {}
+                  
+                  }
+                responseData2:
+                  description: response order success 2
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get all data order",
+                    data: {}
+                  
+                  }
+        '400':
+          description: response order error 1
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseOrder1:
+                  description: response error 1
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "failed to get all data order",
+                    data: {}
+                  }
+                responseOrder2:
+                  description: response failed 2
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "Failed to get all data order",
+                    data: {}
+                  }
+    post:
+      tags:
+        - Order
+      summary: order user
+      description: example order user
+      requestBody:
+        content:
+          application/json:
+            # schema
+            examples:
+              productData1:
+                description: "example add order"
+                value: {
+                  quantity: 3,
+                }
+              productData2:
+                description: "example add order"
+                value: {
+                  quantity: 2,
+                }
+
+      responses:
+        '200':
+          description: response success post order insert
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseOrder1:
+                  description: response success create order 
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to insert your data order",
+                    data: {
+                      id: 1,
+                      name: "lenovo",
+                      price: 10000,
+                      qty: 3,
+                      description: "ini product lenovo"
+                     }
+                  
+                  }
+                responseOrder2:
+                  description: response success 2
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get all data order",
+                    data: {
+                      id: 2,
+                      name: "Asus",
+                      price: 10000,
+                      quantity: 3,
+                      description: "ini product asus"
+                    }
+                  
+                  }
+        '400':
+          description: response error post product insert
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response error 1
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "failed to bind your data product, check your input",
+                    data: {
+                    }
+                  
+                  }
+                responseData2:
+                  description: response error 2
+                  value: {
+                    code: 400, 
+                    status: "error",
+                    message: "failed to bind your data product, check your input",
+                    data: {}
+                  
+                  }
+  /order/{id}:
+    get:
+      tags:
+        - Order
+      parameters:
+        - in: path
+          name: id   
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        
+      responses:
+        '200':
+          description: response order success 1
+          content:
+            application/json:
+              # schema:
+                # $ref:'#/components/schemas/responseProductSuccess'
+              examples:
+                responseData1:
+                  description: response success 1
+                  value: {
+                    code: 200, 
+                    status: "success",
+                    message: "Success to get your data product 1",
+                    data: {
+                      id_product: 1,
+                      name: "lenovo",
+                      price: 10000,
+                      qty: 3,
+                      description: "ini product lenovo"
                      } 
                   
                   }
@@ -407,6 +598,8 @@ paths:
                      } 
                   
                   }
+
+##### COMPONENT #####
 components:
   schemas: 
     requestLogin:
