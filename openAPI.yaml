@@ -126,7 +126,8 @@ paths:
       requestBody:
         content:
           application/json:
-            # schema:
+            schema:
+              $ref: #/components/schemas/requestRegister
               examples:
                 serData1:
                   description: "Example create data user "
@@ -149,8 +150,8 @@ paths:
           description: Respons success create users
           content:
             application/json:
-              # schema
-              # $ref
+              schema:
+                $ref: #/components/schemas/responseRegisterSuccess
               examples:
                 responseData1:
                   description: response success 1
@@ -471,7 +472,8 @@ paths:
       requestBody:
         content:
           application/json:
-            # schema
+          schemas:
+            $ref: #
             examples:
               productData1:
                 description: "example add order"
@@ -628,6 +630,50 @@ components:
         }
       }
     failedResponse:
+      type: object
+      properties: {
+        "code":{
+          type: number
+        },
+        "message": {
+          type: string
+        },
+        "status": {
+          type: string
+        }
+      }
+    requestRegister:
+      type: object
+      properties:
+        "name":
+          type: string
+          minLength: 1
+        "email":
+          type: string
+          minLength: 1
+        "password":
+          type: string
+          minLength: 1
+        "alamat":
+          type: string
+          minLength: 1
+    responseRegisterSuccess:
+      type: object
+      properties: {
+        "code":{
+          type: number
+        },
+        "message": {
+          type: string
+        },
+        "status": {
+          type: string
+        },
+        "data":{
+          type: object
+        }
+      }
+    failedRegister:
       type: object
       properties: {
         "code":{
